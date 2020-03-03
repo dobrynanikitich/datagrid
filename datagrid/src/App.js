@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+
+import Table from './components/Table/table';
+import { CHANGE_USERS } from './actions/actions';
 
 import './App.css';
 
-function App({ isSorted }) {
-  console.log(isSorted)
+const App = ({ isSorted, users, changeUsers }) => {
+  useEffect(() => {
+    changeUsers();
+  }, [])
+
   return (
     <div className="App">
-      HELLO WORLD!
+      <div onClick={changeUsers}>HELLO WORLD!</div>
+      <Table usersInfo={users} />
     </div>
   );
 }
@@ -15,7 +22,14 @@ function App({ isSorted }) {
 const mapStateToProps = state => {
   return {
     isSorted: state.isSorted,
+    users: state.users,
   }
 }
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => {
+  return {
+    changeUsers: () => dispatch({ type: CHANGE_USERS })
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
