@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import Table from './components/Table/table';
+import UsersTable from './components/Table/table';
 import { CHANGE_USERS } from './actions/actions';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 const App = ({ isSorted, users, changeUsers }) => {
@@ -14,7 +15,7 @@ const App = ({ isSorted, users, changeUsers }) => {
   return (
     <div className="App">
       <div onClick={changeUsers}>HELLO WORLD!</div>
-      <Table usersInfo={users} />
+      <UsersTable usersInfo={users} />
     </div>
   );
 }

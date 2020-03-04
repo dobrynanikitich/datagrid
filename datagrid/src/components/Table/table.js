@@ -5,8 +5,14 @@ import './table.css';
 
 const UsersTable = ({ usersInfo }) => {
     return (
-        <Table striped bordered hover responsive>
-            <thead>
+        <Table 
+            className='table-main'
+            striped 
+            bordered 
+            hover 
+            responsive
+        >
+            <thead className='table-header'>
                 <tr>
                     <th>#</th>
                     <th>First Name</th>
@@ -20,7 +26,7 @@ const UsersTable = ({ usersInfo }) => {
             </thead>
             <tbody>
                 {usersInfo.map((user, i) => (
-                    <tr>
+                    <tr key={`${user}${i}`}>
                         <td>{i + 1}</td>
                         <td>{user.firstName}</td>
                         <td>{user.lastName}</td>

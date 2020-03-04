@@ -19,7 +19,16 @@ const reducer = (state = initialState, action) => {
                     age: Faker.random.number({ min: 17, max: 80 }),
                     userName: Faker.internet.userName(),
                     amount: Faker.finance.amount(),
-                    boolean: Faker.random.boolean()
+                    boolean: Faker.random.boolean(),
+                    enum: [
+                        { value: 0, label: 'First Name' },
+                        { value: 1, label: 'Second Name' },
+                        { value: 2, label: 'City' },
+                        { value: 3, label: 'Age' },
+                        { value: 4, label: 'Username' },
+                        { value: 5, label: 'Amount' },
+                        { value: 6, label: 'Boolean' }
+                    ]
                 })
             }
             return {
