@@ -12,14 +12,24 @@ export const firstColumnEnum = {
 };
 
 export const tableHeaderEnum = {
-    1: 'Last name',
-    2: 'City',
-    3: 'Age',
-    4: 'Username',
-    5: 'Amount',
-    6: 'Active'
+    0: 'Last name',
+    1: 'City',
+    2: 'Age',
+    3: 'Username',
+    4: 'Amount',
+    5: 'Active'
 };
 
 export const firstColumnHeaderEnum = {
     0: 'First name',
+}
+
+export const sortArrayEnum = {
+    0: 'firstName',
+    1: 'lastName',
+    2: 'city',
+    3: 'age',
+    4: 'userName',
+    5: 'amount',
+    6: 'boolean'
 }
