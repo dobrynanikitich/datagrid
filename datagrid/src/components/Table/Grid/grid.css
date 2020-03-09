@@ -52,3 +52,16 @@
   .spinner {
     height: 100vh;
   }
+
+  .icons-wrapper {
+      display: flex;
+      padding-left: 10px;
+  }
+
+  .showSortOder {
+      display: block;
+  }
+
+  .hideSortOrder {
+      opacity: 0.3;
+  }

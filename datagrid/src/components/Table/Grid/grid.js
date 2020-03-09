@@ -5,10 +5,12 @@ import { SORT_USERS } from '../../../actions/actions';
 import { VariableSizeGrid as Grid } from 'react-window';
 import { userDataEnum, firstColumnEnum, tableHeaderEnum, firstColumnHeaderEnum } from '../../../constants/constants';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLongArrowAltDown, faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons';
 import './grid.css';
 let classNames = require('classnames');
 
-const VirtualizedTable = ({ users, sortUsers, height }) => {
+const VirtualizedTable = ({ users, sortUsers, height, sortedColumns }) => {
     const staticGrid = React.useRef(null);
     const staticGrid2 = React.useRef(null);
     const onScroll = React.useCallback(
@@ -78,6 +80,17 @@ const VirtualizedTable = ({ users, sortUsers, height }) => {
                 onClick={() => sortUsers(columnIndex + 1)}
                 >
                     {tableHeaderEnum[columnIndex]}
+                    <div className='icons-wrapper'>
+                        <FontAwesomeIcon 
+                            icon={faLongArrowAltDown}
+                            className={sortedColumns[columnIndex + 1].isSorted && sortedColumns[columnIndex + 1].sortDir === 'descend' ?
+                            'showSortOder' : 'hideSortOrder' }
+                             />
+                        <FontAwesomeIcon 
+                            className={sortedColumns[columnIndex + 1].isSorted && sortedColumns[columnIndex + 1].sortDir === 'ascend' ?
+                            'showSortOder' : 'hideSortOrder'  }
+                        icon={faLongArrowAltUp} />
+                    </div>
                 </div>
         );
     };
@@ -95,6 +108,17 @@ const VirtualizedTable = ({ users, sortUsers, height }) => {
                 onClick={() => sortUsers(columnIndex)}
             >
                 {firstColumnHeaderEnum[0]}
+                <div className='icons-wrapper'>
+                    <FontAwesomeIcon 
+                        icon={faLongArrowAltDown}
+                        className={sortedColumns[columnIndex].isSorted && sortedColumns[columnIndex].sortDir === 'descend' ?
+                        'showSortOder' : 'hideSortOrder' }
+                            />
+                    <FontAwesomeIcon 
+                        className={sortedColumns[columnIndex].isSorted && sortedColumns[columnIndex].sortDir === 'ascend' ?
+                        'showSortOder' : 'hideSortOrder'  }
+                    icon={faLongArrowAltUp} />
+                </div>
             </div>
         );
     };
@@ -160,6 +184,7 @@ const VirtualizedTable = ({ users, sortUsers, height }) => {
 const mapStateToProps = state => {
     return {
       users: state.users,
+      sortedColumns: state.sortedColumns,
     }
   }
   
