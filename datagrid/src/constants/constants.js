@@ -4,11 +4,11 @@ export const userDataEnum = {
     2: 'age',
     3: 'userName',
     4: 'amount',
-    5: 'boolean'
+    5: 'boolean',
 };
 
 export const firstColumnEnum = {
-    0: 'firstName'
+    0: 'firstName',
 };
 
 export const tableHeaderEnum = {
@@ -17,7 +17,7 @@ export const tableHeaderEnum = {
     2: 'Age',
     3: 'Username',
     4: 'Amount',
-    5: 'Active'
+    5: 'Active',
 };
 
 export const firstColumnHeaderEnum = {
@@ -31,5 +31,14 @@ export const sortArrayEnum = {
     3: 'age',
     4: 'userName',
     5: 'amount',
-    6: 'boolean'
+    6: 'boolean',
 }
+
+export const leftHeaderArray = [
+    {
+        'First name': 'First name'
+    }, 
+    {
+        'First name': 'Input'
+    }
+]

@@ -1,6 +1,6 @@
 import Faker from 'faker';
 
-import { CHANGE_USERS, SORT_USERS } from '../actions/actions';
+import { CHANGE_USERS, SORT_USERS, FILTER_BY_COLUMN } from '../actions/actions';
 import { sortArrayEnum } from '../constants/constants'; 
 
 const initialState = {
@@ -41,7 +41,13 @@ const initialState = {
         isSorted: false,
         sortDir: null,
       },
-    ]
+    ],
+    searchInputs: {
+      0: '',
+      1: '',
+      2: '',
+      3: '',
+    }
 }
 
 const compareValuesToAscend = (a, b, property) => {
@@ -77,8 +83,10 @@ const reducer = (state = initialState, action) => {
           }
           return {
             ...state,
-            users: newUsers
+            users: newUsers,
+            transformUsers: [...newUsers]
           }
+
         case SORT_USERS:
           const { payload } = action;
           const { sortedColumns } = state;
@@ -115,9 +123,26 @@ const reducer = (state = initialState, action) => {
           }
           return {
             ...state,
-            users: newArr,
+            transformUsers: newArr,
             sortedColumns: sortDirection,
           }
+
+          case FILTER_BY_COLUMN:
+            const value = action.payload.e.target.value.toLowerCase();
+            const inputId = action.payload.id;
+            let copyUsers = [...state.users];
+            const filteredByCol = copyUsers.filter(item => {
+              return item[sortArrayEnum[inputId]].toLowerCase().includes(value)
+            })
+            console.log(filteredByCol);
+            return {
+              ...state,
+              transformUsers: filteredByCol,
+              searchInputs: {
+                ...state.searchInputs,
+                [inputId]: value
+              }
+            }
         default: return state;
     }
 };
