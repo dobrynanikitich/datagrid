@@ -102,7 +102,7 @@ const reducer = (state = initialState, action) => {
         case SORT_USERS:
           const { payload } = action;
           const { sortedColumns } = state;
-          let users = [...state.users];
+          let users = [...state.transformUsers];
           let newArr = users;
           let sortDirection = [
             ...sortedColumns,
@@ -174,15 +174,28 @@ const reducer = (state = initialState, action) => {
               }
 
             case SWITCH_TOOGLE:
-              let actualUsers = [...state.users];
+              let actualUsers = [...state.transformUsers];
               let currentToogleStatus = !state.isToogleActive;
-                let toogledUsers = actualUsers.filter(item => (
-                  currentToogleStatus ? item[sortArrayEnum[6]] === 'yes' : item[sortArrayEnum[6]]
-                ));
+              let toggledUsers = [];
+              let bufferUsers = [];
+              if (!state.isToogleActive) {
+                bufferUsers = state.transformUsers;
+                console.log('bufferUsers+++++++++++', bufferUsers)
+              }
+              if (currentToogleStatus) {
+               toggledUsers = actualUsers.filter(item => (
+                  item[sortArrayEnum[6]] === 'yes'
+                ))
+              } else {
+                bufferUsers = state.bufferUsers.filter(item => {
+                  return item[sortArrayEnum[6]] === 'no' || item[sortArrayEnum[6]] === 'yes'
+                })
+              }
               return {
                 ...state,
-                transformUsers: toogledUsers,
+                transformUsers: currentToogleStatus ? toggledUsers : bufferUsers,
                 isToogleActive: currentToogleStatus,
+                bufferUsers: bufferUsers,
               }
         default: return state;
     }
