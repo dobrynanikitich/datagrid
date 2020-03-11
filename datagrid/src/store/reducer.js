@@ -1,6 +1,6 @@
 import Faker from 'faker';
 
-import { CHANGE_USERS, SORT_USERS, FILTER_BY_COLUMN, CLEAR_INPUT_VALUE } from '../actions/actions';
+import { CHANGE_USERS, SORT_USERS, FILTER_BY_COLUMN, CLEAR_INPUT_VALUE, SWITCH_TOOGLE } from '../actions/actions';
 import { sortArrayEnum } from '../constants/constants'; 
 
 const initialState = {
@@ -48,20 +48,21 @@ const initialState = {
       2: '',
       3: '',
       100: '',
-    }
+    },
+    isToogleActive: false,
 }
 
 const compareValuesToAscend = (a, b, property) => {
     if (a[property] > b[property]) {
-      return 1; 
+      return 1;
     } if (a[property] < b[property]) {
       return -1;
     } return 0
-  } 
+  }
 
   const compareValuesToDescend = (a, b, property) => {
     if (a[property] < b[property]) {
-      return 1; 
+      return 1;
     } if (a[property] > b[property]) {
       return -1;
     } return 0
@@ -73,6 +74,7 @@ const compareValuesToAscend = (a, b, property) => {
         if (typeof(object[prop]) === 'string') {
           return object[prop].toLowerCase().includes(value)
         }
+        return false;
       }))
   )
 
@@ -88,7 +90,7 @@ const reducer = (state = initialState, action) => {
               age: Faker.random.number({ min: 17, max: 80 }),
               userName: Faker.internet.userName(),
               amount: Faker.finance.amount(),
-              boolean: String(Faker.random.boolean()),
+              boolean: Faker.random.boolean() ? 'yes' : 'no',
             })
           }
           return {
@@ -169,6 +171,18 @@ const reducer = (state = initialState, action) => {
                   3: ''
                 },
                 transformUsers: state.users
+              }
+
+            case SWITCH_TOOGLE:
+              let actualUsers = [...state.users];
+              let currentToogleStatus = !state.isToogleActive;
+                let toogledUsers = actualUsers.filter(item => (
+                  currentToogleStatus ? item[sortArrayEnum[6]] === 'yes' : item[sortArrayEnum[6]]
+                ));
+              return {
+                ...state,
+                transformUsers: toogledUsers,
+                isToogleActive: currentToogleStatus,
               }
         default: return state;
     }

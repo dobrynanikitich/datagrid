@@ -11,7 +11,7 @@ const Input = ({ id, filterUsersByColumn, searchInputs, clearInputValueOnUnFocus
         'firstNameInput': id === 0,
         'lastNameInput': id === 1,
         'cityInput': id === 2,
-        'mainSearchInput': id === 4,
+        'mainSearchInput': id === 100,
     })
     return (
         <InputGroup size="sm" key={id} className={classes} >
