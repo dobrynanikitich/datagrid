@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { SORT_USERS, FILTER_BY_COLUMN } from '../../../actions/actions';
+import { SORT_USERS, FILTER_BY_COLUMN, CLEAR_INPUT_VALUE } from '../../../actions/actions';
 import { VariableSizeGrid as Grid } from 'react-window';
 import { userDataEnum, firstColumnEnum, tableHeaderEnum, firstColumnHeaderEnum, leftHeaderArray } from '../../../constants/constants';
 
@@ -13,7 +13,7 @@ import './grid.css';
 
 let classNames = require('classnames');
 
-const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsersByColumn, searchInputs }) => {
+const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsersByColumn, searchInputs, clearInputValueOnUnFocus }) => {
     const staticGrid = React.useRef(null);
     const staticGrid2 = React.useRef(null);
     const staticGrid3 = React.useRef(null);
@@ -118,8 +118,7 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
                 style={style}
                 onClick={rowIndex !== 1 ? () => sortUsers(columnIndex) : null }
             >
-                {rowIndex === 1 ? <input id={columnIndex} key={columnIndex} filterUsersByColumn={filterUsersByColumn} searchInputs={searchInputs} value={searchInputs[columnIndex]} onChange={(e) => {
-            filterUsersByColumn(e, columnIndex)}} /> : 
+                {rowIndex === 1 ? null : 
                 <>
                     {'First Name'}
                     <div className='icons-wrapper'>
@@ -143,8 +142,14 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
 
     return (
         <>
-        {/* <Input id={0} key={0} /> */}
         <div className='table-header'>
+            <Input
+                id={0} 
+                key={0} 
+                searchInputs={searchInputs} 
+                filterUsersByColumn={filterUsersByColumn}
+                clearInputValueOnUnFocus={clearInputValueOnUnFocus}
+            />
           <Grid
             key={100}
             className='table-header-first'
@@ -166,7 +171,7 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
             height={100}
             rowCount={2}
             rowHeight={index => rowHeights[index]}
-            width={685}
+            width={700}
           >
             {stickyMainHeader}
           </Grid>
@@ -177,8 +182,8 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
             ref={staticGrid3}
             columnCount={1}
             columnWidth={index => columnWidths[7]}
-            height={height - 20}
-            rowCount={users.length}
+            height={height}
+            rowCount={users.length ? users.length : 0}
             rowHeight={index => rowHeights[index]}
             width={200}
           >
@@ -190,7 +195,7 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
             columnCount={6}
             columnWidth={index => columnWidths[index]}
             height={height}
-            rowCount={users.length}
+            rowCount={users.length ? users.length : 0}
             rowHeight={index => rowHeights[index]}
             width={700}
           >
@@ -212,7 +217,8 @@ const mapStateToProps = state => {
   const mapDispatchToProps = dispatch => {
     return {
       sortUsers: (id) => dispatch({ type: SORT_USERS, payload: id }),
-      filterUsersByColumn: (e, id) => dispatch({ type: FILTER_BY_COLUMN, payload: {e, id}})
+      filterUsersByColumn: (e, id) => dispatch({ type: FILTER_BY_COLUMN, payload: {e, id}}),
+      clearInputValueOnUnFocus: () => dispatch({ type: CLEAR_INPUT_VALUE })
     }
   }
 

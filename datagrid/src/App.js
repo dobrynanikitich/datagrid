@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import VirtualizedTable from './components/Table/Grid/grid';
+import Controll from './components/Controll/controll';
 
 const App = ({  users, changeUsers }) => {
 
@@ -17,6 +18,7 @@ const App = ({  users, changeUsers }) => {
   if (users.length) {
     return (
       <div className="App">
+          <Controll />
           <AutoSizer>
             {({ height, width }) => (
               <VirtualizedTable 

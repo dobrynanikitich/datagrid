@@ -1,6 +1,6 @@
 import Faker from 'faker';
 
-import { CHANGE_USERS, SORT_USERS, FILTER_BY_COLUMN } from '../actions/actions';
+import { CHANGE_USERS, SORT_USERS, FILTER_BY_COLUMN, CLEAR_INPUT_VALUE } from '../actions/actions';
 import { sortArrayEnum } from '../constants/constants'; 
 
 const initialState = {
@@ -47,6 +47,7 @@ const initialState = {
       1: '',
       2: '',
       3: '',
+      100: '',
     }
 }
 
@@ -64,7 +65,16 @@ const compareValuesToAscend = (a, b, property) => {
     } if (a[property] > b[property]) {
       return -1;
     } return 0
-  } 
+  }
+
+  const filterByValue = (array, value) => (
+    array.filter(object =>
+      Object.keys(object).some(prop => {
+        if (typeof(object[prop]) === 'string') {
+          return object[prop].toLowerCase().includes(value)
+        }
+      }))
+  )
 
 const reducer = (state = initialState, action) => {
     let newUsers = [];
@@ -124,6 +134,7 @@ const reducer = (state = initialState, action) => {
           return {
             ...state,
             transformUsers: newArr,
+            users: newArr,
             sortedColumns: sortDirection,
           }
 
@@ -131,10 +142,14 @@ const reducer = (state = initialState, action) => {
             const value = action.payload.e.target.value.toLowerCase();
             const inputId = action.payload.id;
             let copyUsers = [...state.users];
-            const filteredByCol = copyUsers.filter(item => {
-              return item[sortArrayEnum[inputId]].toLowerCase().includes(value)
-            })
-            console.log(filteredByCol);
+            let filteredByCol;
+            if (inputId !== 100) {
+              filteredByCol = copyUsers.filter(item => {
+                return item[sortArrayEnum[inputId]].toLowerCase().includes(value)
+              })
+            } else {
+              filteredByCol = filterByValue(copyUsers, value)
+            }
             return {
               ...state,
               transformUsers: filteredByCol,
@@ -143,6 +158,18 @@ const reducer = (state = initialState, action) => {
                 [inputId]: value
               }
             }
+          
+            case CLEAR_INPUT_VALUE:
+              return {
+                ...state,
+                searchInputs: {
+                  0: '',
+                  1: '',
+                  2: '',
+                  3: ''
+                },
+                transformUsers: state.users
+              }
         default: return state;
     }
 };
