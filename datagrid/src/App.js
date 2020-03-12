@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { CHANGE_USERS } from './actions/actions';
+import { CHANGE_USERS, PRESS_KEYS_CONTROLL } from './actions/actions';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -9,9 +9,12 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import VirtualizedTable from './components/Table/Grid/grid';
 import Controll from './components/Controll/controll';
 
-const App = ({  users, changeUsers }) => {
+
+const App = ({  users, changeUsers, keyPressControllHandler }) => {
 
   useEffect(() => {
+    document.addEventListener("keydown", (e) => keyPressControllHandler(e));
+    document.addEventListener('keyup', (e) => keyPressControllHandler(e));
     changeUsers();
   }, [])
 
@@ -47,6 +50,7 @@ const mapDispatchToProps = dispatch => {
   return {
     changeUsers: () => dispatch({ type: CHANGE_USERS }),
     sortUsers: () => dispatch({ type: 'SORT_USERS' }),
+    keyPressControllHandler: (e) => dispatch({ type: PRESS_KEYS_CONTROLL, payload: { e } })
   }
 }
 

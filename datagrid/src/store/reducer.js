@@ -4,16 +4,54 @@ import {
   CHANGE_USERS, 
   SORT_USERS, 
   FILTER_BY_COLUMN,
-  FILTER_BY_ARRAY,
-  CLEAR_INPUT_VALUE, 
+  FILTER_BY_ARRAY, 
   SWITCH_TOOGLE, 
-  MULTISELECT_FILTER 
+  MULTISELECT_FILTER,
+  PRESS_KEYS_CONTROLL,
 } from '../actions/actions';
 
 import { sortArrayEnum } from '../constants/constants'; 
+let _  = require('lodash');
 
 const initialState = {
-    users: [],
+    users: [
+      {
+        firstName: 'AaaTestToCheckSort',
+        lastName: 'BbbTestToCheckSort',
+        city: 'Minsk',
+        age: 40,
+        userName: 'CccTestToCHeckSort',
+        amount: 200000,
+        boolean: 'yes',
+      },
+      {
+        firstName: 'AaaTestToCheckSort',
+        lastName: 'BbbTestToCheckSort',
+        city: 'London',
+        age: 30,
+        userName: 'CccTestToCHeckSort',
+        amount: 200000,
+        boolean: 'yes',
+      },
+      {
+        firstName: 'AaaTestToCheckSort',
+        lastName: 'BbbTestToCheckSort',
+        city: 'Paris',
+        age: 80,
+        userName: 'CccTestToCHeckSort',
+        amount: 200000,
+        boolean: 'yes',
+      },
+      {
+        firstName: 'AaaTestToCheckSort',
+        lastName: 'BbbTestToCheckSort',
+        city: 'Monaco',
+        age: 20,
+        userName: 'CccTestToCHeckSort',
+        amount: 200000,
+        boolean: 'yes',
+      },
+    ],
     sortedColumns: [
       {
         name: 'firstName',
@@ -59,21 +97,36 @@ const initialState = {
       100: '',
     },
     isToogleActive: false,
-    filters: {
-
-    }
+    filters: {},
+    sort: [],
 }
 
 const filtersUsersArrayHandler = (filters, usersArray) => {
   let currentUsers = [...usersArray];
     if (filters.searchByColumn) {
-      currentUsers = usersArray.filter(item => {
+      currentUsers = currentUsers.filter(item => {
           return item[sortArrayEnum[0]].toLowerCase().includes(filters.searchByColumn)
         })
       }
 
     if (filters.searchByArray) {
       currentUsers = filterByValue(currentUsers, filters.searchByArray);
+    }
+
+    if (filters.searchByToogle) {
+      if (filters.searchByToogle) {
+        currentUsers = currentUsers.filter(item => (
+          item[sortArrayEnum[6]] === 'yes'
+        ))
+      } else {
+        return currentUsers;
+      }
+    }
+
+    if (filters.searchBySelect) {
+      currentUsers = currentUsers.filter(item => (
+        filters.searchBySelect.some(data => Number(data.value) === item.ageValue)
+      ))
     }
 
     return currentUsers;
@@ -106,7 +159,7 @@ const compareValuesToAscend = (a, b, property) => {
   )
 
 const reducer = (state = initialState, action) => {
-    let newUsers = [];
+    let newUsers = [...state.users];
     switch (action.type) {
         case CHANGE_USERS: 
           for(let i = 0; i < 100; i++) {
@@ -121,7 +174,7 @@ const reducer = (state = initialState, action) => {
             })
           }
           newUsers.map(item => {
-            if (item.age > 18 && item.age <= 24) {
+            if (item.age >= 17 && item.age <= 24) {
               item['ageValue'] = 0;
             } else if (item.age >= 25 && item.age <= 31) {
               item['ageValue'] = 1;
@@ -139,14 +192,26 @@ const reducer = (state = initialState, action) => {
             transformUsers: [...newUsers]
           }
 
-        case SORT_USERS:
+        case SORT_USERS: {
           const { payload } = action;
           const { sortedColumns } = state;
-          let users = [...state.transformUsers];
-          let newArr = users;
-          let sortDirection = [
-            ...sortedColumns,
-          ]
+          let copyUsers = [...state.users];
+          let sortDirection = [...sortedColumns];
+          let newArr = [...state.sort];
+          const filters = {
+            ...state.filters,
+            filterBySort: {
+              sortDirection,
+              payload,
+            },
+          }
+
+          if (state.isShiftPressed) {
+            newArr.push(sortArrayEnum[payload]);
+
+            copyUsers = _.orderBy(copyUsers, newArr, ['asc'])
+          } else {
+
           if (!sortedColumns[payload].isSorted) {
             let prevSortObj = sortDirection.find(item => (
               item.isSorted && item.sortDir
@@ -155,30 +220,36 @@ const reducer = (state = initialState, action) => {
               prevSortObj.isSorted = false;
               prevSortObj.sortDir = null;
             }
-            newArr.sort((a, b) => {
+            copyUsers.sort((a, b) => {
               sortDirection[payload].isSorted = true;
               sortDirection[payload].sortDir = 'ascend';
               return compareValuesToAscend(a, b, sortArrayEnum[payload]);
             });
           } else {
             if (sortedColumns[payload].sortDir === 'ascend') {
-              newArr.sort((a, b) => {
+              copyUsers.sort((a, b) => {
                 sortDirection[payload].sortDir = 'descend';
                 return compareValuesToDescend(a, b, sortArrayEnum[payload]);
               });
             } else {
-              newArr.sort((a, b) => {
+              copyUsers.sort((a, b) => {
                 sortDirection[payload].sortDir = 'ascend';
                 return compareValuesToAscend(a, b, sortArrayEnum[payload]);
               });
             }
           }
+          }
+
+          const transormeUsers = filtersUsersArrayHandler(filters, copyUsers);
+
           return {
             ...state,
-            transformUsers: newArr,
-            users: newArr,
+            transformUsers: transormeUsers,
+            users: copyUsers,
             sortedColumns: sortDirection,
+            sort: newArr,
           }
+        }
 
           case FILTER_BY_ARRAY: {
             const copyUsers = [...state.users];
@@ -224,40 +295,55 @@ const reducer = (state = initialState, action) => {
           }
 
 
-          case SWITCH_TOOGLE:
-            let actualUsers = [...state.transformUsers];
-            let currentToogleStatus = !state.isToogleActive;
-            let toggledUsers = [];
-            let bufferUsers = [];
-            if (!state.isToogleActive) {
-              bufferUsers = state.transformUsers;
+          case SWITCH_TOOGLE: {
+            const copyUsers = [...state.users];
+            const currentToogleStatus = !state.isToogleActive;
+            let filters = {
+              ...state.filters,
+              searchByToogle: currentToogleStatus,
             }
-            if (currentToogleStatus) {
-              toggledUsers = actualUsers.filter(item => (
-                item[sortArrayEnum[6]] === 'yes'
-              ))
-            } else {
-              bufferUsers = state.bufferUsers.filter(item => {
-                return item[sortArrayEnum[6]] === 'no' || item[sortArrayEnum[6]] === 'yes'
-              })
-            }
+
+            const tranformUsers = filtersUsersArrayHandler(filters, copyUsers);
+
             return {
               ...state,
-              transformUsers: currentToogleStatus ? toggledUsers : bufferUsers,
+              transformUsers: tranformUsers,
               isToogleActive: currentToogleStatus,
-              bufferUsers: bufferUsers,
+              filters: filters,
             }
+          }
           
-          case MULTISELECT_FILTER:
+          case MULTISELECT_FILTER: {
+            const copyUsers = [...state.users];
             const selectedFields = action.payload;
-            let selectedUsers = [...state.transformUsers];
-            let newselectedUsers = selectedUsers.filter(item => (
-              selectedFields.some(data => Number(data.value) === item.ageValue)
-            ))
+            const filters = {
+              ...state.filters,
+              searchBySelect: selectedFields, 
+            }
+
+            const tranformUsers = filtersUsersArrayHandler(filters, copyUsers);
+
             return {
               ...state,
-              transformUsers: newselectedUsers
+              transformUsers: tranformUsers,
             }
+          }
+
+          case PRESS_KEYS_CONTROLL: {
+            let isShiftPressed = false;
+            const { key, type } = action.payload.e;
+            if (key === 'Shift' && type === 'keydown') {
+              isShiftPressed = true;
+            }
+            if (key === 'Shift' && type === 'keyup') {
+              isShiftPressed = false;
+            }
+
+            return {
+              ...state,
+              isShiftPressed: isShiftPressed,
+            }
+          }
       default: return state;
     }
 };

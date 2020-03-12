@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { SORT_USERS, FILTER_BY_COLUMN, CLEAR_INPUT_VALUE } from '../../../actions/actions';
+import { SORT_USERS, FILTER_BY_COLUMN } from '../../../actions/actions';
 import { VariableSizeGrid as Grid } from 'react-window';
 import { userDataEnum, firstColumnEnum, tableHeaderEnum, firstColumnHeaderEnum, leftHeaderArray } from '../../../constants/constants';
 
@@ -13,7 +13,7 @@ import './grid.css';
 
 let classNames = require('classnames');
 
-const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsersByColumn, searchInputs, clearInputValueOnUnFocus }) => {
+const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsersByColumn, searchInputs }) => {
     const staticGrid = React.useRef(null);
     const staticGrid2 = React.useRef(null);
     const staticGrid3 = React.useRef(null);
@@ -148,7 +148,6 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
                 key={0} 
                 searchInputs={searchInputs} 
                 filterUsersByColumn={filterUsersByColumn}
-                clearInputValueOnUnFocus={clearInputValueOnUnFocus}
             />
           <Grid
             key={100}
@@ -218,7 +217,6 @@ const mapStateToProps = state => {
     return {
       sortUsers: (id) => dispatch({ type: SORT_USERS, payload: id }),
       filterUsersByColumn: (e, id) => dispatch({ type: FILTER_BY_COLUMN, payload: {e, id}}),
-      clearInputValueOnUnFocus: () => dispatch({ type: CLEAR_INPUT_VALUE })
     }
   }
 

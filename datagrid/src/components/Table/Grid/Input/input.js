@@ -6,7 +6,7 @@ import './input.css';
 
 let classNames = require('classnames');
 
-const Input = ({ id, filterUsersByColumn, filterUsersByArray, searchInputs, clearInputValueOnUnFocus }) => {
+const Input = ({ id, filterUsersByColumn, filterUsersByArray, searchInputs }) => {
     let classes = classNames({
         'firstNameInput': id === 0,
         'lastNameInput': id === 1,
@@ -24,7 +24,6 @@ const Input = ({ id, filterUsersByColumn, filterUsersByArray, searchInputs, clea
                 onChange={(e) => {
                     id === 0 ? filterUsersByColumn(e, id) : filterUsersByArray(e, id)
                 }}
-                // onFocus={clearInputValueOnUnFocus}
             />
         </InputGroup>
     );
