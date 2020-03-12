@@ -4,4 +4,6 @@
     box-sizing: border-box;
     padding: 10px 15px;
     display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }

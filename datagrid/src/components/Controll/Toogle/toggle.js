@@ -2,9 +2,11 @@ import React from 'react';
 import Toggle from 'react-toggle';
 import "react-toggle/style.css";
 
+import './toggle.css';
+
 const ToggleButton = ({ isToogleActive, switchToogleHandler }) => {
     return (
-        <label>
+        <label className='toogle-wrapper'>
         <Toggle
             defaultChecked={isToogleActive}
             icons={false}

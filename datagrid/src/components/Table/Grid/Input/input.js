@@ -6,7 +6,7 @@ import './input.css';
 
 let classNames = require('classnames');
 
-const Input = ({ id, filterUsersByColumn, searchInputs, clearInputValueOnUnFocus }) => {
+const Input = ({ id, filterUsersByColumn, filterUsersByArray, searchInputs, clearInputValueOnUnFocus }) => {
     let classes = classNames({
         'firstNameInput': id === 0,
         'lastNameInput': id === 1,
@@ -22,7 +22,7 @@ const Input = ({ id, filterUsersByColumn, searchInputs, clearInputValueOnUnFocus
                 aria-describedby="basic-addon2"
                 value={searchInputs[id]}
                 onChange={(e) => {
-                    filterUsersByColumn(e, id)
+                    id === 0 ? filterUsersByColumn(e, id) : filterUsersByArray(e, id)
                 }}
                 // onFocus={clearInputValueOnUnFocus}
             />

@@ -42,3 +42,11 @@ export const leftHeaderArray = [
         'First name': 'Input'
     }
 ]
+
+export const ageColumnSortEnum = {
+    0: '18 - 24',
+    1: '25 - 31',
+    2: '32 - 40',
+    3: '41 - 60',
+    4: '61 - 80',
+}

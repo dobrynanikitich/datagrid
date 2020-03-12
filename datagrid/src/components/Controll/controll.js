@@ -3,19 +3,33 @@ import { connect } from 'react-redux';
 
 import Input from '../Table/Grid/Input/input';
 import Toogle from './Toogle/toggle';
+import SelectAge from './Select/select';
 
-import { FILTER_BY_COLUMN, SWITCH_TOOGLE } from '../../actions/actions';
+import { FILTER_BY_COLUMN, SWITCH_TOOGLE, MULTISELECT_FILTER, FILTER_BY_ARRAY } from '../../actions/actions';
 
 import './controll.css';
 
-const Controll = ({ searchInputs, filterUsersByColumn, isToogleActive, switchToogleHandler }) => {
+const Controll = ({ 
+    searchInputs, 
+    filterUsersByColumn,
+    filterUsersByArray, 
+    isToogleActive, 
+    switchToogleHandler, 
+    multiselectFilterHandler 
+}) => {
     return (
         <section className='controll-wrapper'>
-            <Input id={100} searchInputs={searchInputs} filterUsersByColumn={filterUsersByColumn}/>
+            <Input 
+                id={100} 
+                searchInputs={searchInputs} 
+                filterUsersByColumn={filterUsersByColumn}
+                filterUsersByArray={filterUsersByArray}
+            />
             <Toogle 
                 isToogleActive={isToogleActive}
                 switchToogleHandler={switchToogleHandler}
             />
+            <SelectAge multiselectFilterHandler={multiselectFilterHandler}/>
         </section>
     );
 };
@@ -30,7 +44,9 @@ const mapStateToProps = state => {
   const mapDispatchToProps = dispatch => {
     return {
       filterUsersByColumn: (e, id) => dispatch({ type: FILTER_BY_COLUMN, payload: {e, id}}),
-      switchToogleHandler: () => dispatch({ type: SWITCH_TOOGLE })
+      filterUsersByArray: (e, id) => dispatch({ type: FILTER_BY_ARRAY, payload: {e, id}}),
+      switchToogleHandler: () => dispatch({ type: SWITCH_TOOGLE }),
+      multiselectFilterHandler: (change) => dispatch({ type: MULTISELECT_FILTER, payload: change }),
     }
   }
 
