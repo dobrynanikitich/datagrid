@@ -29,7 +29,7 @@ const initialState = {
         lastName: 'BbbTestToCheckSort',
         city: 'London',
         age: 30,
-        userName: 'CccTestToCHeckSort',
+        userName: 'BbbTestToCHeckSort',
         amount: 200000,
         boolean: 'yes',
       },
@@ -38,7 +38,7 @@ const initialState = {
         lastName: 'BbbTestToCheckSort',
         city: 'Paris',
         age: 80,
-        userName: 'CccTestToCHeckSort',
+        userName: 'AaaTestToCHeckSort',
         amount: 200000,
         boolean: 'yes',
       },
@@ -47,7 +47,7 @@ const initialState = {
         lastName: 'BbbTestToCheckSort',
         city: 'Monaco',
         age: 20,
-        userName: 'CccTestToCHeckSort',
+        userName: 'ZzzTestToCHeckSort',
         amount: 200000,
         boolean: 'yes',
       },
@@ -207,25 +207,53 @@ const reducer = (state = initialState, action) => {
           }
 
           if (state.isShiftPressed) {
-            newArr.push(sortArrayEnum[payload]);
-
-            copyUsers = _.orderBy(copyUsers, newArr, ['asc'])
-          } else {
-
-          if (!sortedColumns[payload].isSorted) {
-            let prevSortObj = sortDirection.find(item => (
-              item.isSorted && item.sortDir
-            ));
-            if (prevSortObj) {
-              prevSortObj.isSorted = false;
-              prevSortObj.sortDir = null;
+            sortDirection.map(item => {
+              if (item.isSorted) {
+                newArr.push(item)
+              }
+            })
+            let spliceEl;
+            newArr.map((item, i) => {
+              if (item.name === sortArrayEnum[payload]) {
+                spliceEl = newArr.splice(i, 1, sortDirection[payload])
+              }
+            })
+            
+            if (!spliceEl) {
+              newArr.push(sortDirection[payload])
             }
+
+            console.log(newArr)
+            
+            copyUsers = _.orderBy(copyUsers, newArr.map(item => item.name), newArr.map(item => {
+              if (item.name !== sortArrayEnum[payload]) {
+                return item.sortDir === 'ascend' ? 'asc' : 'desc';
+              } else {
+                return item.sortDir === 'ascend' ? 'desc' : 'asc';
+              }
+            }));
+
+            sortDirection[payload].isSorted = true;
+            sortDirection[payload].sortDir !== 'ascend' || sortDirection[payload].sortDir === 'descend' ? sortDirection[payload].sortDir = 'ascend' : sortDirection[payload].sortDir = 'descend';
+          } else {
+            newArr = [];
+          if (!sortedColumns[payload].isSorted) {
+            sortDirection.map(item => {
+              item.sortDir = null;
+              item.isSorted = false;
+            })
             copyUsers.sort((a, b) => {
               sortDirection[payload].isSorted = true;
               sortDirection[payload].sortDir = 'ascend';
               return compareValuesToAscend(a, b, sortArrayEnum[payload]);
             });
           } else {
+            sortDirection.map(item => {
+              if(item.name !== sortArrayEnum[payload]) {
+                item.isSorted = false;
+                item.sortDir = null;
+              }
+            })
             if (sortedColumns[payload].sortDir === 'ascend') {
               copyUsers.sort((a, b) => {
                 sortDirection[payload].sortDir = 'descend';
