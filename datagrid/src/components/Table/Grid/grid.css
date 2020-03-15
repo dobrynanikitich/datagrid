@@ -1,6 +1,5 @@
   .table-header {
     display: flex;
-    width: 900px;
     position: relative
   }
 
@@ -41,12 +40,12 @@
   }
   
   .grid-wrapper {
-    width: 900px;
     display: flex;
   }
 
   .grid-first {
     overflow: hidden !important;
+    /* flex-shrink: 0; */
   }
   
   .table-cell {
@@ -65,6 +64,7 @@
   .table-header-first,
   .table-header--second {
       background-color: cadetblue !important;
+      /* flex-shrink: 0; */
   }
   
   .dark-cell {
@@ -86,4 +86,9 @@
 
   .hideSortOrder {
       opacity: 0.3;
+  }
+
+  .highLightCell {
+    cursor: pointer;
+    background-color: lightskyblue;
   }

@@ -17,7 +17,7 @@ export const tableHeaderEnum = {
     2: 'Age',
     3: 'Username',
     4: 'Amount',
-    5: 'Active',
+    5: 'Active', 
 };
 
 export const firstColumnHeaderEnum = {
@@ -49,4 +49,14 @@ export const ageColumnSortEnum = {
     2: '32 - 40',
     3: '41 - 60',
     4: '61 - 80',
+}
+
+export const gridWidth = {
+    '0': 200,
+    '1': 200,
+    '2': 90,
+    '3': 220,
+    '4': 90,    
+    '5': 90,    
+    '6': 90,
 }

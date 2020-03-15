@@ -22,6 +22,7 @@ const Input = ({ id, filterUsersByColumn, filterUsersByArray, searchInputs }) =>
                 aria-describedby="basic-addon2"
                 value={searchInputs[id]}
                 onChange={(e) => {
+                    e.persist()
                     id === 0 ? filterUsersByColumn(e, id) : filterUsersByArray(e, id)
                 }}
             />

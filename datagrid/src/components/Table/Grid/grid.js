@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { SORT_USERS, FILTER_BY_COLUMN } from '../../../actions/actions';
+import { SORT_USERS, FILTER_BY_COLUMN, SET_ACTIVE_ROW } from '../../../actions/actions';
 import { VariableSizeGrid as Grid } from 'react-window';
-import { userDataEnum, firstColumnEnum, tableHeaderEnum, firstColumnHeaderEnum, leftHeaderArray } from '../../../constants/constants';
+import { userDataEnum, firstColumnEnum, tableHeaderEnum, gridWidth } from '../../../constants/constants';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLongArrowAltDown, faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons';
@@ -13,7 +13,9 @@ import './grid.css';
 
 let classNames = require('classnames');
 
-const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsersByColumn, searchInputs }) => {
+const VirtualizedTable = ({ users = [], sortUsers, height, sortedColumns, filterUsersByColumn, searchInputs, setActiveRow, setRows, columnsToDisplay }) => {
+    const [highlightRow, changeHighlightRow] = useState(null);
+
     const staticGrid = React.useRef(null);
     const staticGrid2 = React.useRef(null);
     const staticGrid3 = React.useRef(null);
@@ -55,18 +57,40 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
             'table-cell': true,
             'light-cell': rowIndex % 2 === 0,
             'dark-cell': rowIndex % 2 !== 0,
+            'highLightCell': (Number(highlightRow) === Number(rowIndex) && highlightRow !== null) || setRows.find(id => Number(id) === Number(rowIndex)),
         })
         return (
-            <div className={classes} style={style}>{users[rowIndex][userDataEnum[columnIndex]]}</div>
+            <div 
+                id={rowIndex} 
+                onMouseEnter={(e) => changeHighlightRow(e.target.id)}
+                onMouseLeave={(e) => changeHighlightRow(null)}
+                onClick={(e) => setActiveRow(e)}
+                className={classes} 
+                style={style}
+            >
+                {users[rowIndex][userDataEnum[columnsToDisplay[columnIndex]]]}
+            </div>
         );
     };
   
     const stickyLeftColumn = ({ columnIndex, rowIndex, style }) => {
         let classes = classNames({
             'table-cell': true,
+            'light-cell': rowIndex % 2 === 0,
+            'dark-cell': rowIndex % 2 !== 0,
+            'highLightCell': (Number(highlightRow) === Number(rowIndex) && highlightRow !== null) || setRows.find(id => Number(id) === Number(rowIndex)),
         });
         return (
-            <div className={classes} style={style}>{users[rowIndex][firstColumnEnum[columnIndex]]}</div>
+            <div 
+                id={rowIndex}
+                onMouseEnter={(e) => changeHighlightRow(e.target.id)}
+                onMouseLeave={(e) => changeHighlightRow(null)}
+                onClick={(e) => setActiveRow(e)}
+                className={classes} 
+                style={style}
+            >
+                {users[rowIndex][firstColumnEnum[columnIndex]]}
+            </div>
         );
     };
   
@@ -80,12 +104,12 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
                 id={columnIndex + 1} 
                 className={classes} 
                 style={style}
-                onClick={rowIndex !== 1 ? () => sortUsers(columnIndex + 1) : null}
+                onClick={rowIndex !== 1 ? () => sortUsers(columnIndex + 1) : () => {}}
             >
                 {
                     rowIndex !== 1 && 
                     <>
-                    {tableHeaderEnum[columnIndex]}             
+                    {tableHeaderEnum[columnsToDisplay[columnIndex]]}             
                         <div className='icons-wrapper'>
                             <FontAwesomeIcon 
                                 icon={faLongArrowAltDown}
@@ -116,7 +140,7 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
                 key={`${columnIndex}${rowIndex}20`}
                 className={classes} 
                 style={style}
-                onClick={rowIndex !== 1 ? () => sortUsers(columnIndex) : null }
+                onClick={rowIndex !== 1 ? () => sortUsers(columnIndex) : () => {}}
             >
                 {rowIndex === 1 ? null : 
                 <>
@@ -139,6 +163,16 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
             </>
         );
     };
+
+    let gridHeight = users.length * 50 > 600 ? 600 : users.length * 50;
+    // let gridHeight = users.length * 50;
+    let tableWidth = 0;
+    columnsToDisplay.forEach(item => {
+        tableWidth += gridWidth[item];
+    })
+    if (tableWidth > 700) {
+        tableWidth = 700
+    }
 
     return (
         <>
@@ -165,12 +199,12 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
           <Grid
             className='table-header--second'
             ref={staticGrid2}
-            columnCount={6}
+            columnCount={columnsToDisplay.length}
             columnWidth={index => columnWidths[index]}
             height={100}
             rowCount={2}
             rowHeight={index => rowHeights[index]}
-            width={700}
+            width={tableWidth}
           >
             {stickyMainHeader}
           </Grid>
@@ -181,8 +215,8 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
             ref={staticGrid3}
             columnCount={1}
             columnWidth={index => columnWidths[7]}
-            height={height}
-            rowCount={users.length ? users.length : 0}
+            height={gridHeight - 20}
+            rowCount={users ? users.length : 0}
             rowHeight={index => rowHeights[index]}
             width={200}
           >
@@ -193,10 +227,10 @@ const VirtualizedTable = ({ users, sortUsers, height, sortedColumns, filterUsers
             className='grid-second'
             columnCount={6}
             columnWidth={index => columnWidths[index]}
-            height={height}
-            rowCount={users.length ? users.length : 0}
+            height={gridHeight}
+            rowCount={users ? users.length : 0}
             rowHeight={index => rowHeights[index]}
-            width={700}
+            width={tableWidth}
           >
             {mainTable}
           </Grid>
@@ -210,13 +244,16 @@ const mapStateToProps = state => {
       users: state.transformUsers,
       sortedColumns: state.sortedColumns,
       searchInputs: state.searchInputs,
+      setRows: state.clickedRows,
+      columnsToDisplay: state.columnsToDisplay,
     }
   }
   
   const mapDispatchToProps = dispatch => {
     return {
       sortUsers: (id) => dispatch({ type: SORT_USERS, payload: id }),
-      filterUsersByColumn: (e, id) => dispatch({ type: FILTER_BY_COLUMN, payload: {e, id}}),
+      filterUsersByColumn: (e, id) => dispatch({ type: FILTER_BY_COLUMN, payload: { e, id }}),
+      setActiveRow: (e) => dispatch({ type: SET_ACTIVE_ROW, payload: { e } })
     }
   }
 

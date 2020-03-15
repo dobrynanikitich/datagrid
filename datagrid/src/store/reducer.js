@@ -1,4 +1,5 @@
 import Faker from 'faker';
+import { tableHeaderEnum } from '../constants/constants';
 
 import { 
   CHANGE_USERS, 
@@ -8,6 +9,9 @@ import {
   SWITCH_TOOGLE, 
   MULTISELECT_FILTER,
   PRESS_KEYS_CONTROLL,
+  SET_ACTIVE_ROW,
+  DELETE_SELECTED_ROW,
+  SELECT_COLUMNS,
 } from '../actions/actions';
 
 import { sortArrayEnum } from '../constants/constants'; 
@@ -99,6 +103,8 @@ const initialState = {
     isToogleActive: false,
     filters: {},
     sort: [],
+    clickedRows: [],
+    columnsToDisplay: Object.keys(tableHeaderEnum),
 }
 
 const filtersUsersArrayHandler = (filters, usersArray) => {
@@ -162,14 +168,14 @@ const reducer = (state = initialState, action) => {
     let newUsers = [...state.users];
     switch (action.type) {
         case CHANGE_USERS: 
-          for(let i = 0; i < 100; i++) {
+          for(let i = 0; i < 997; i++) {
             newUsers.push({
               firstName: Faker.name.firstName(),
               lastName: Faker.name.lastName(),
               city: Faker.address.city(),
               age: Faker.random.number({ min: 17, max: 80 }),
               userName: Faker.internet.userName(),
-              amount: Faker.finance.amount(),
+              amount: Number(Faker.finance.amount()),
               boolean: Faker.random.boolean() ? 'yes' : 'no',
             })
           }
@@ -354,11 +360,13 @@ const reducer = (state = initialState, action) => {
             return {
               ...state,
               transformUsers: tranformUsers,
+              filters: filters,
             }
           }
 
           case PRESS_KEYS_CONTROLL: {
             let isShiftPressed = false;
+            let isCtrlPressed = false;
             const { key, type } = action.payload.e;
             if (key === 'Shift' && type === 'keydown') {
               isShiftPressed = true;
@@ -366,13 +374,71 @@ const reducer = (state = initialState, action) => {
             if (key === 'Shift' && type === 'keyup') {
               isShiftPressed = false;
             }
+            if (key === 'Control' && type === 'keydown') {
+              isCtrlPressed = true;
+            }
+            if (key === 'Control' && type === 'keyup') {
+              isCtrlPressed = false;
+            }
 
             return {
               ...state,
               isShiftPressed: isShiftPressed,
+              isCtrlPressed: isCtrlPressed,
             }
           }
-      default: return state;
+
+          case SET_ACTIVE_ROW: {
+            const { id } = action.payload.e.target;
+            const setRows = [...state.clickedRows];
+            if (state.isCtrlPressed) {
+              const index = setRows.findIndex(item => Number(item) === Number(id));
+              if (index === -1) {
+                setRows.push(id);
+              } else {
+                setRows.splice(index, 1); 
+              }
+            } else {
+              const index = setRows.findIndex(item => Number(item) === Number(id));
+              if (index === -1) {
+                setRows.splice(0, 1, id);
+              } else {
+                setRows.pop();
+              }
+            }
+            
+            return {
+              ...state,
+              clickedRows: setRows,
+            }
+          }
+
+          case DELETE_SELECTED_ROW: {
+            const selectedRows = [...state.clickedRows];
+            const copyUsers = [...state.users];
+            selectedRows.map(item => {
+              copyUsers.splice(Number(item), 1, 'deleted')
+            })
+            const filteredUsers = copyUsers.filter(item => item !== 'deleted');
+
+            return {
+              ...state,
+              users: filteredUsers,
+              transformUsers: filteredUsers,
+              clickedRows: [],
+            }
+          }
+
+          case SELECT_COLUMNS: {
+            const displayColumns = action.payload.sort();
+            return {
+              ...state,
+              columnsToDisplay: displayColumns,
+            }
+          }
+      default: return {
+        ...state,
+      }
     }
 };
 
