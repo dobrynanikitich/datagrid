@@ -6,7 +6,7 @@ import './input.css';
 
 let classNames = require('classnames');
 
-const Input = ({ id, filterUsersByColumn, filterUsersByArray, searchInputs }) => {
+const Input = ({ id, filterUsersByColumn, filterUsersByArray, searchInputs, toolTip }) => {
     let classes = classNames({
         'firstNameInput': id === 0,
         'lastNameInput': id === 1,
@@ -25,6 +25,7 @@ const Input = ({ id, filterUsersByColumn, filterUsersByArray, searchInputs }) =>
                     e.persist()
                     id === 0 ? filterUsersByColumn(e, id) : filterUsersByArray(e, id)
                 }}
+                data-tip={toolTip}
             />
         </InputGroup>
     );

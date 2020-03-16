@@ -4,13 +4,14 @@ import "react-toggle/style.css";
 
 import './toggle.css';
 
-const ToggleButton = ({ isToogleActive, switchToogleHandler }) => {
+const ToggleButton = ({ isToogleActive, switchToogleHandler, toolTip }) => {
     return (
-        <label className='toogle-wrapper'>
+        <label className='toogle-wrapper' data-tip={toolTip}>
         <Toggle
             defaultChecked={isToogleActive}
             icons={false}
-            onChange={switchToogleHandler} />
+            onChange={switchToogleHandler}
+        />
         <span>Show active users only</span>
         </label>
     )

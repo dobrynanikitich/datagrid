@@ -8,6 +8,7 @@ import { userDataEnum, firstColumnEnum, tableHeaderEnum, gridWidth } from '../..
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLongArrowAltDown, faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons';
 import Input from './Input/input';
+import ReactTooltip from 'react-tooltip';
 
 import './grid.css';
 
@@ -67,13 +68,14 @@ const VirtualizedTable = ({ users = [], sortUsers, height, sortedColumns, filter
                 onClick={(e) => setActiveRow(e)}
                 className={classes} 
                 style={style}
+                data-tip='Press'
             >
                 {users[rowIndex][userDataEnum[columnsToDisplay[columnIndex]]]}
             </div>
         );
     };
   
-    const stickyLeftColumn = ({ columnIndex, rowIndex, style }) => {
+    const stickyLeftColumn = ({ columnIndex, rowIndex, style, toolTip }) => {
         let classes = classNames({
             'table-cell': true,
             'light-cell': rowIndex % 2 === 0,
@@ -88,6 +90,7 @@ const VirtualizedTable = ({ users = [], sortUsers, height, sortedColumns, filter
                 onClick={(e) => setActiveRow(e)}
                 className={classes} 
                 style={style}
+                data-tip={toolTip}
             >
                 {users[rowIndex][firstColumnEnum[columnIndex]]}
             </div>
@@ -223,6 +226,7 @@ const VirtualizedTable = ({ users = [], sortUsers, height, sortedColumns, filter
             rowCount={users ? users.length : 0}
             rowHeight={index => rowHeights[index]}
             width={200}
+            toolTip='lalalal'
           >
             {stickyLeftColumn}
           </Grid>

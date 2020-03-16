@@ -11,7 +11,7 @@ const options = Object.keys(ageColumnSortEnum).map(key => (
     }
 ))
 
-const SelectAge = ({ multiselectFilterHandler }) => {
+const SelectAge = ({ multiselectFilterHandler, toolTip }) => {
     return (
         <Select
             closeMenuOnSelect={false}
@@ -19,6 +19,7 @@ const SelectAge = ({ multiselectFilterHandler }) => {
             onChange={(change) => multiselectFilterHandler(change)} 
             isMulti
             options={options}
+            data-tip={toolTip}
         />
     );
 }

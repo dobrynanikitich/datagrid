@@ -10,6 +10,7 @@ import Controll from './components/Controll/controll';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import ReactTooltip from 'react-tooltip';
 
 const msToTime = (duration) => {
   var milliseconds = parseInt((duration % 1000) / 100),
@@ -38,6 +39,7 @@ const App = ({  users, changeUsers, keyPressControllHandler, setRows, deleteSele
   if (users.length) {
     return (
       <div className="App">
+          <ReactTooltip place='bottom' />
           <Controll />
           <div className={!setRows.length ? 'displayNone' : 'deleteRows'}>
             <div>

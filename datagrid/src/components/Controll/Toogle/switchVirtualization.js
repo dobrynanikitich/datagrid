@@ -4,13 +4,14 @@ import "react-toggle/style.css";
 
 import './toggle.css';
 
-const SwitchOffVirt = ({ isVitrualized, switchVirtualizationStatus }) => {
+const SwitchOffVirt = ({ isVitrualized, switchVirtualizationStatus, toolTip }) => {
     return (
-        <label className='toogle-wrapper'>
+        <label className='toogle-wrapper' data-tip={toolTip}>
         <Toggle
             defaultChecked={isVitrualized}
             icons={false}
-            onChange={switchVirtualizationStatus} />
+            onChange={switchVirtualizationStatus}
+            />
         <span>Swich off virtualization</span>
         </label>
     )
