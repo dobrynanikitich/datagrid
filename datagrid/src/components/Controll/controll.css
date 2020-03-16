@@ -14,6 +14,7 @@
 .right-controll--wrapper {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .stopwatch {
@@ -23,11 +24,27 @@
 
 .get-info--wrapper {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     box-sizing: border-box;
     height: 30px;
     margin-top: 10px;
     align-items: center;
+}
+
+.save-csv {
+    width: 30px;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 8px;
+    background: lightblue;
+    border: 1px solid black;
+}
+
+.save-csv:hover {
+    cursor: pointer;
+    color: white;
 }
 
 .get-info {
@@ -37,7 +54,7 @@
     border: 1px solid black;
     display: flex;
     justify-content: flex-end;
-    width: 33%;
+    width: 215px;
 }
 
 .get-info > span {

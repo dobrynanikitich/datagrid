@@ -6,9 +6,10 @@ import Toogle from './Toogle/toggle';
 import SelectAge from './Select/select';
 import SelectColumns from './HideColumns/hideColumns';
 import SwitchVirtualization from './Toogle/switchVirtualization';
+import { CSVLink, CSVDownload  } from "react-csv";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfo} from '@fortawesome/free-solid-svg-icons';
+import { faInfo, faSave } from '@fortawesome/free-solid-svg-icons';
 
 import { FILTER_BY_COLUMN, SWITCH_TOOGLE, MULTISELECT_FILTER, FILTER_BY_ARRAY, SELECT_COLUMNS, SWITCH_OFF_VITRUALIZATION } from '../../actions/actions';
 
@@ -24,6 +25,7 @@ const Controll = ({
     selectColumnsHandler,
     switchVirtualizationStatus,
     isVirtualized,
+    transformUsers = [],
 }) => {
     return (
         <section className='controll-wrapper'>
@@ -50,6 +52,10 @@ const Controll = ({
             <SelectAge multiselectFilterHandler={multiselectFilterHandler} toolTip='Select users by Age column (ENUM implementation)'/>
             <SelectColumns selectColumnsHandler={selectColumnsHandler}/>
             <div className='get-info--wrapper'>
+              <CSVLink data={transformUsers} data-tip='Save to CSV' className='save-csv'>
+                <FontAwesomeIcon icon={faSave} />
+              </CSVLink>
+              {/* <CSVDownload data={transformUsers} target='_blank'>CLICK ME</CSVDownload> */}
               <div 
                 className='get-info' 
                 data-multiline={true}
@@ -69,6 +75,7 @@ const mapStateToProps = state => {
       searchInputs: state.searchInputs,
       isToogleActive: state.isToogleActive,
       isVirtualized: state.isVirtualized,
+      transformUsers: state.transformUsers,
     }
   }
   

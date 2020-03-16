@@ -16,6 +16,7 @@
     "react": "^16.13.0",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-bootstrap-toggle": "^2.3.2",
+    "react-csv": "^1.1.2",
     "react-dom": "^16.13.0",
     "react-hot-keys": "^2.5.1",
     "react-hotkeys": "^2.0.0",
