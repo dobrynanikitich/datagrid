@@ -12,6 +12,7 @@ import {
   SET_ACTIVE_ROW,
   DELETE_SELECTED_ROW,
   SELECT_COLUMNS,
+  SWITCH_OFF_VITRUALIZATION,
 } from '../actions/actions';
 
 import { sortArrayEnum } from '../constants/constants'; 
@@ -105,6 +106,9 @@ const initialState = {
     sort: [],
     clickedRows: [],
     columnsToDisplay: Object.keys(tableHeaderEnum),
+    offset: 0,
+    paused: true,
+    isVirtualized: true,
 }
 
 const filtersUsersArrayHandler = (filters, usersArray) => {
@@ -167,7 +171,7 @@ const compareValuesToAscend = (a, b, property) => {
 const reducer = (state = initialState, action) => {
     let newUsers = [...state.users];
     switch (action.type) {
-        case CHANGE_USERS: 
+        case CHANGE_USERS:
           for(let i = 0; i < 997; i++) {
             newUsers.push({
               firstName: Faker.name.firstName(),
@@ -434,6 +438,13 @@ const reducer = (state = initialState, action) => {
             return {
               ...state,
               columnsToDisplay: displayColumns,
+            }
+          }
+
+          case SWITCH_OFF_VITRUALIZATION: {
+            return {
+              ...state,
+              isVirtualized: !state.isVirtualized,
             }
           }
       default: return {

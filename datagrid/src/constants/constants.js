@@ -60,3 +60,13 @@ export const gridWidth = {
     '5': 90,    
     '6': 90,
 }
+
+export const selectColumnsEnum = {
+    0: 'First name',
+    1: 'Last name',
+    2: 'City',
+    3: 'Age',
+    4: 'Username',
+    5: 'Amount',
+    6: 'Active', 
+};

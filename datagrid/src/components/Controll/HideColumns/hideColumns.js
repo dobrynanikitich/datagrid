@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 
-import { sortArrayEnum } from '../../../constants/constants';
+import { selectColumnsEnum } from '../../../constants/constants';
 
-const options = Object.keys(sortArrayEnum).map(key => (
+const options = Object.keys(selectColumnsEnum).map(key => (
     {
         value: Number(key - 1),
-        label: sortArrayEnum[key],
+        label: selectColumnsEnum[key],
         isFixed: Number(key) === 0 ? true : false,
     }
 ))

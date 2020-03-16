@@ -13,7 +13,7 @@ import './grid.css';
 
 let classNames = require('classnames');
 
-const VirtualizedTable = ({ users = [], sortUsers, height, sortedColumns, filterUsersByColumn, searchInputs, setActiveRow, setRows, columnsToDisplay }) => {
+const VirtualizedTable = ({ users = [], sortUsers, height, sortedColumns, filterUsersByColumn, searchInputs, setActiveRow, setRows, columnsToDisplay, isVirtualized }) => {
     const [highlightRow, changeHighlightRow] = useState(null);
 
     const staticGrid = React.useRef(null);
@@ -164,8 +164,12 @@ const VirtualizedTable = ({ users = [], sortUsers, height, sortedColumns, filter
         );
     };
 
-    let gridHeight = users.length * 50 > 600 ? 600 : users.length * 50;
-    // let gridHeight = users.length * 50;
+    let gridHeight;
+    if (isVirtualized) {
+        gridHeight = users.length * 50 > 600 ? 600 : users.length * 50;
+    } else {
+        gridHeight = users.length * 50;
+    }
     let tableWidth = 0;
     columnsToDisplay.forEach(item => {
         tableWidth += gridWidth[item];
@@ -225,7 +229,7 @@ const VirtualizedTable = ({ users = [], sortUsers, height, sortedColumns, filter
           <Grid
             onScroll={onScroll}
             className='grid-second'
-            columnCount={6}
+            columnCount={columnsToDisplay.length}
             columnWidth={index => columnWidths[index]}
             height={gridHeight}
             rowCount={users ? users.length : 0}
@@ -246,6 +250,7 @@ const mapStateToProps = state => {
       searchInputs: state.searchInputs,
       setRows: state.clickedRows,
       columnsToDisplay: state.columnsToDisplay,
+      isVirtualized: state.isVirtualized,
     }
   }
   

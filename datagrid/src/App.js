@@ -5,20 +5,35 @@ import { CHANGE_USERS, PRESS_KEYS_CONTROLL, DELETE_SELECTED_ROW } from './action
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import AutoSizer from 'react-virtualized-auto-sizer';
 import VirtualizedTable from './components/Table/Grid/grid';
 import Controll from './components/Controll/controll';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
-const App = ({  users, changeUsers, keyPressControllHandler, setRows, deleteSelectedRow }) => {
+const msToTime = (duration) => {
+  var milliseconds = parseInt((duration % 1000) / 100),
+    seconds = Math.floor((duration / 1000) % 60),
+    minutes = Math.floor((duration / (1000 * 60)) % 60),
+    hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
+  hours = (hours < 10) ? "0" + hours : hours;
+  minutes = (minutes < 10) ? "0" + minutes : minutes;
+  seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+  return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+}
+
+const App = ({  users, changeUsers, keyPressControllHandler, setRows, deleteSelectedRow }) => {
+  const  startTime = new Date().getTime();
+  console.log('startTime', startTime)
   useEffect(() => {
     document.addEventListener("keydown", (e) => keyPressControllHandler(e));
     document.addEventListener('keyup', (e) => keyPressControllHandler(e));
     changeUsers();
-  }, [])
+    const renderTime = new Date().getTime() - startTime;
+    console.log(msToTime(renderTime));
+  }, []);
 
   if (users.length) {
     return (

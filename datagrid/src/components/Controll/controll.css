@@ -1,10 +1,22 @@
 .controll-wrapper {
     width: 100%;
-    height: 100px;
     box-sizing: border-box;
     padding: 10px 0;
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
     max-width: 900px;
+}
+
+.left-controll--wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.right-controll--wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.stopwatch {
+    height: 30px;
+    padding-top: 10px;
 }
