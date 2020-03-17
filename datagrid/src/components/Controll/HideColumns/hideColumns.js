@@ -5,9 +5,9 @@ import { selectColumnsEnum } from '../../../constants/constants';
 
 const options = Object.keys(selectColumnsEnum).map(key => (
     {
-        value: Number(key - 1),
-        label: selectColumnsEnum[key],
-        isFixed: Number(key) === 0 ? true : false,
+      value: Number(key - 1),
+      label: selectColumnsEnum[key],
+      isFixed: Number(key) === 0 || Number(key) === 6  ? true : false,
     }
 ))
 

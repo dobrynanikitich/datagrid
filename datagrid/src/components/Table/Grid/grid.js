@@ -180,6 +180,9 @@ const VirtualizedTable = ({ users = [], sortUsers, height, sortedColumns, filter
     if (tableWidth > 700) {
         tableWidth = 700
     }
+    if (tableWidth < 200) {
+        tableWidth = 180
+    }
 
     return (
         <>
@@ -222,7 +225,7 @@ const VirtualizedTable = ({ users = [], sortUsers, height, sortedColumns, filter
             ref={staticGrid3}
             columnCount={1}
             columnWidth={index => columnWidths[7]}
-            height={gridHeight - 20}
+            height={gridHeight === 0 ? 0 : gridHeight - 20}
             rowCount={users ? users.length : 0}
             rowHeight={index => rowHeights[index]}
             width={200}

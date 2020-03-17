@@ -15,6 +15,18 @@ import { FILTER_BY_COLUMN, SWITCH_TOOGLE, MULTISELECT_FILTER, FILTER_BY_ARRAY, S
 
 import './controll.css';
 
+const headers = [
+  { label: "First Name", key: "firstname" },
+  { label: "Last Name", key: "lastname" },
+  { label: "Email", key: "email" }
+];
+
+const data = [
+  { firstname: "Ahmed", lastname: "Tomi", email: "ah@smthing.co.com" },
+  { firstname: "Raed", lastname: "Labes", email: "rl@smthing.co.com" },
+  { firstname: "Yezzi", lastname: "Min l3b", email: "ymin@cocococo.com" }
+];
+
 const Controll = ({ 
     searchInputs, 
     filterUsersByColumn,
@@ -55,7 +67,6 @@ const Controll = ({
               <CSVLink data={transformUsers} data-tip='Save to CSV' className='save-csv'>
                 <FontAwesomeIcon icon={faSave} />
               </CSVLink>
-              {/* <CSVDownload data={transformUsers} target='_blank'>CLICK ME</CSVDownload> */}
               <div 
                 className='get-info' 
                 data-multiline={true}
