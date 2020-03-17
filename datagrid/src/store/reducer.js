@@ -18,103 +18,108 @@ import {
 import { sortArrayEnum } from '../constants/constants'; 
 let _  = require('lodash');
 
-const initialState = {
-    users: [
-      {
-        firstName: 'AaaTestToCheckSort',
-        lastName: 'BbbTestToCheckSort',
-        city: 'Minsk',
-        age: 40,
-        userName: 'CccTestToCHeckSort',
-        amount: 200000,
-        boolean: 'yes',
-      },
-      {
-        firstName: 'AaaTestToCheckSort',
-        lastName: 'BbbTestToCheckSort',
-        city: 'London',
-        age: 30,
-        userName: 'BbbTestToCHeckSort',
-        amount: 200000,
-        boolean: 'yes',
-      },
-      {
-        firstName: 'AaaTestToCheckSort',
-        lastName: 'BbbTestToCheckSort',
-        city: 'Paris',
-        age: 80,
-        userName: 'AaaTestToCHeckSort',
-        amount: 200000,
-        boolean: 'yes',
-      },
-      {
-        firstName: 'AaaTestToCheckSort',
-        lastName: 'BbbTestToCheckSort',
-        city: 'Monaco',
-        age: 20,
-        userName: 'ZzzTestToCHeckSort',
-        amount: 200000,
-        boolean: 'yes',
-      },
-    ],
-    sortedColumns: [
-      {
-        name: 'firstName',
-        isSorted: false,
-        sortDir: null,
-        sortPriority: null,
-      },
-      {
-        name: 'lastName',
-        isSorted: false,
-        sortDir: null,
-        sortPriority: null,
-      },
-      {
-        name: 'city',
-        isSorted: false,
-        sortDir: null,
-        sortPriority: null,
-      },
-      {
-        name: 'age',
-        isSorted: false,
-        sortDir: null,
-        sortPriority: null,
-      },
-      {
-        name: 'userName',
-        isSorted: false,
-        sortDir: null,
-        sortPriority: null,
-      },
-      {
-        name: 'amount',
-        isSorted: false,
-        sortDir: null,
-        sortPriority: null,
-      },
-      {
-        name: 'boolean',
-        isSorted: false,
-        sortDir: null,
-        sortPriority: null,
-      },
-    ],
-    searchInputs: {
-      0: '',
-      1: '',
-      2: '',
-      3: '',
-      100: '',
+const hardCodeUsers = [
+  {
+    firstName: 'AaaTestToCheckSort',
+    lastName: 'BbbTestToCheckSort',
+    city: 'Minsk',
+    age: 40,
+    userName: 'CccTestToCHeckSort',
+    amount: 200000,
+    boolean: 'yes',
+  },
+  {
+    firstName: 'AaaTestToCheckSort',
+    lastName: 'BbbTestToCheckSort',
+    city: 'London',
+    age: 30,
+    userName: 'BbbTestToCHeckSort',
+    amount: 200000,
+    boolean: 'yes',
+  },
+  {
+    firstName: 'AaaTestToCheckSort',
+    lastName: 'BbbTestToCheckSort',
+    city: 'Paris',
+    age: 80,
+    userName: 'AaaTestToCHeckSort',
+    amount: 200000,
+    boolean: 'yes',
+  },
+  {
+    firstName: 'AaaTestToCheckSort',
+    lastName: 'BbbTestToCheckSort',
+    city: 'Monaco',
+    age: 20,
+    userName: 'ZzzTestToCHeckSort',
+    amount: 200000,
+    boolean: 'yes',
+  },
+];
+
+const myState = {
+  users: [],
+  transformUsers: [],
+  sortedColumns: [
+    {
+      name: 'firstName',
+      isSorted: false,
+      sortDir: null,
+      sortPriority: null,
     },
-    isToogleActive: false,
-    filters: {},
-    sort: [],
-    clickedRows: [],
-    columnsToDisplay: Object.keys(tableHeaderEnum),
-    isVirtualized: true,
+    {
+      name: 'lastName',
+      isSorted: false,
+      sortDir: null,
+      sortPriority: null,
+    },
+    {
+      name: 'city',
+      isSorted: false,
+      sortDir: null,
+      sortPriority: null,
+    },
+    {
+      name: 'age',
+      isSorted: false,
+      sortDir: null,
+      sortPriority: null,
+    },
+    {
+      name: 'userName',
+      isSorted: false,
+      sortDir: null,
+      sortPriority: null,
+    },
+    {
+      name: 'amount',
+      isSorted: false,
+      sortDir: null,
+      sortPriority: null,
+    },
+    {
+      name: 'boolean',
+      isSorted: false,
+      sortDir: null,
+      sortPriority: null,
+    },
+  ],
+  searchInputs: {
+    0: '',
+    1: '',
+    2: '',
+    3: '',
+    100: '',
+  },
+  isToogleActive: false,
+  filters: {},
+  sort: [],
+  clickedRows: [],
+  columnsToDisplay: Object.keys(tableHeaderEnum),
+  isVirtualized: true,
 }
+
+const initialState = JSON.parse(localStorage.getItem('state')) ? JSON.parse(localStorage.getItem('state')) : myState;
 
 const filtersUsersArrayHandler = (filters, usersArray) => {
   let currentUsers = [...usersArray];
@@ -177,34 +182,43 @@ const reducer = (state = initialState, action) => {
     let newUsers = [...state.users];
     switch (action.type) {
         case CHANGE_USERS:
-          for(let i = 0; i < 997; i++) {
-            newUsers.push({
-              firstName: Faker.name.firstName(),
-              lastName: Faker.name.lastName(),
-              city: Faker.address.city(),
-              age: Faker.random.number({ min: 17, max: 80 }),
-              userName: Faker.internet.userName(),
-              amount: Number(Faker.finance.amount()),
-              boolean: Faker.random.boolean() ? 'yes' : 'no',
-            })
-          }
-          newUsers.map(item => {
-            if (item.age >= 17 && item.age <= 24) {
-              item['ageValue'] = 0;
-            } else if (item.age >= 25 && item.age <= 31) {
-              item['ageValue'] = 1;
-            } else if (item.age >= 32 && item.age <= 40) {
-              item['ageValue'] = 2;
-            } else if (item.age >= 41 && item.age <= 60) {
-              item['ageValue'] = 3;
-            } else {
-              item['ageValue'] = 4;
+          if (!state.users.length) {
+            newUsers = newUsers.concat(hardCodeUsers);
+            for(let i = 0; i < 997; i++) {
+              newUsers.push({
+                firstName: Faker.name.firstName(),
+                lastName: Faker.name.lastName(),
+                city: Faker.address.city(),
+                age: Faker.random.number({ min: 17, max: 80 }),
+                userName: Faker.internet.userName(),
+                amount: Number(Faker.finance.amount()),
+                boolean: Faker.random.boolean() ? 'yes' : 'no',
+              })
             }
-          })
+            newUsers.map(item => {
+              if (item.age >= 17 && item.age <= 24) {
+                item['ageValue'] = 0;
+              } else if (item.age >= 25 && item.age <= 31) {
+                item['ageValue'] = 1;
+              } else if (item.age >= 32 && item.age <= 40) {
+                item['ageValue'] = 2;
+              } else if (item.age >= 41 && item.age <= 60) {
+                item['ageValue'] = 3;
+              } else {
+                item['ageValue'] = 4;
+              }
+            })
+            localStorage.setItem('state', JSON.stringify({
+              ...state,
+              users: newUsers,
+              transformUsers: [...newUsers],
+            }));
+          }
+
           return {
             ...state,
             users: newUsers,
-            transformUsers: [...newUsers]
+            transformUsers: !state.users.length ? [...newUsers] : JSON.parse(localStorage.getItem('state')).transformUsers,
           }
 
         case SORT_USERS: {
@@ -295,6 +309,12 @@ const reducer = (state = initialState, action) => {
 
           const transormeUsers = filtersUsersArrayHandler(filters, copyUsers);
 
+          localStorage.setItem('state', JSON.stringify({
+            ...state,
+            users: newUsers,
+            transformUsers: [...newUsers],
+          }));
+
           return {
             ...state,
             transformUsers: transormeUsers,
@@ -314,6 +334,13 @@ const reducer = (state = initialState, action) => {
             const arrayInputId = action.payload.id;
 
             const transformByArray = filtersUsersArrayHandler(filters, copyUsers);
+
+            localStorage.setItem('state', JSON.stringify({
+              ...state,
+              users: newUsers,
+              transformUsers: [...newUsers],
+            }));
+
             return {
               ...state,
               transformUsers: transformByArray,
@@ -335,6 +362,16 @@ const reducer = (state = initialState, action) => {
             }
 
             const tranformUsers = filtersUsersArrayHandler(filters, copyUsers);
+
+            localStorage.setItem('state', JSON.stringify({
+              ...state,
+              transformUsers: tranformUsers,
+              searchInputs: {
+                ...state.searchInputs,
+                [inputId]: value
+              },
+              filters: filters
+            }));
 
             return {
               ...state,
@@ -358,6 +395,13 @@ const reducer = (state = initialState, action) => {
 
             const tranformUsers = filtersUsersArrayHandler(filters, copyUsers);
 
+            localStorage.setItem('state', JSON.stringify({
+              ...state,
+              transformUsers: tranformUsers,
+              isToogleActive: currentToogleStatus,
+              filters: filters,
+            }));
+
             return {
               ...state,
               transformUsers: tranformUsers,
@@ -375,6 +419,12 @@ const reducer = (state = initialState, action) => {
             }
 
             const tranformUsers = filtersUsersArrayHandler(filters, copyUsers);
+
+            localStorage.setItem('state', JSON.stringify({
+              ...state,
+              transformUsers: tranformUsers,
+              filters: filters,
+            }));
 
             return {
               ...state,
@@ -399,6 +449,12 @@ const reducer = (state = initialState, action) => {
             if (key === 'Control' && type === 'keyup') {
               isCtrlPressed = false;
             }
+
+            localStorage.setItem('state', JSON.stringify({
+              ...state,
+              isShiftPressed: isShiftPressed,
+              isCtrlPressed: isCtrlPressed,
+            }));
 
             return {
               ...state,
@@ -425,6 +481,11 @@ const reducer = (state = initialState, action) => {
                 setRows.pop();
               }
             }
+
+            localStorage.setItem('state', JSON.stringify({
+              ...state,
+              clickedRows: setRows,
+            }));
             
             return {
               ...state,
@@ -440,6 +501,13 @@ const reducer = (state = initialState, action) => {
             })
             const filteredUsers = copyUsers.filter(item => item !== 'deleted');
 
+            localStorage.setItem('state', JSON.stringify({
+              ...state,
+              users: filteredUsers,
+              transformUsers: filteredUsers,
+              clickedRows: [],
+            }));
+
             return {
               ...state,
               users: filteredUsers,
@@ -450,6 +518,10 @@ const reducer = (state = initialState, action) => {
 
           case SELECT_COLUMNS: {
             const displayColumns = action.payload.sort();
+            localStorage.setItem('state', JSON.stringify({
+              ...state,
+              columnsToDisplay: displayColumns,
+            }));
             return {
               ...state,
               columnsToDisplay: displayColumns,
@@ -457,6 +529,10 @@ const reducer = (state = initialState, action) => {
           }
 
           case SWITCH_OFF_VITRUALIZATION: {
+            localStorage.setItem('state', JSON.stringify({
+              ...state,
+              isVirtualized: !state.isVirtualized,
+            }));
             return {
               ...state,
               isVirtualized: !state.isVirtualized,
