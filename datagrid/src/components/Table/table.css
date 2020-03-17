@@ -1,0 +1,26 @@
+.table-responsive {
+    height: 755px;
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    background-color: aquamarine;
+    box-shadow: 1px 0px 0px 1px grey, 1px 1px #000;
+}
+
+.table thead tr th:nth-child(1),
+.table thead tr th:nth-child(2) {
+    position: sticky;
+    left: 0;
+    z-index: 100;
+    background: brown;
+}
+
+.table tbody tr td:nth-child(1),
+.table tbody tr td:nth-child(2) {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: yellow;
+}

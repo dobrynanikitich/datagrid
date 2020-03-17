@@ -1,0 +1,67 @@
+.controll-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    max-width: 900px;
+}
+
+.left-controll--wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.right-controll--wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.stopwatch {
+    height: 30px;
+    padding-top: 10px;
+}
+
+.get-info--wrapper {
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    height: 30px;
+    margin-top: 10px;
+    align-items: center;
+}
+
+.save-csv {
+    width: 30px;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 8px;
+    background: lightblue;
+    border: 1px solid black;
+}
+
+.save-csv:hover {
+    cursor: pointer;
+    color: white;
+}
+
+.get-info {
+    background: lightblue;
+    padding: 2px 5px;
+    border-radius: 6px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: flex-end;
+    width: 215px;
+}
+
+.get-info > span {
+    margin-right: 20px;
+}
+
+.get-info:hover {
+    cursor: pointer;
+}

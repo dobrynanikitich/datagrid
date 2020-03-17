@@ -1,0 +1,48 @@
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.table-wrapper {
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.displayNone {
+  display: none;
+}
+
+.deleteRows {
+  display: flex;
+  width: 900px;
+  padding: 2px 10px;
+  box-sizing: border-box;
+  justify-content: flex-end;
+  background: #FA9D9D;
+}
+
+.delete-rows {
+  padding-right: 30px;
+}
+
+.deleteRows > div {
+  display: flex;
+  align-items: center;
+}
+
+.trashAlt {
+  width: 50px;
+  height: 100%;
+  display: flex;
+  color: crimson;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid crimson;
+}
+
+.trashAlt:hover {
+  cursor: pointer;
+  color: lightcoral;
+}

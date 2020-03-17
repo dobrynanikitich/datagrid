@@ -1,0 +1,28 @@
+.firstNameInput {
+    position: absolute;
+    top: 51px;
+    left: 5px;
+    z-index: 100;
+    width: 190px;
+}
+
+.lastNameInput {
+    position: absolute;
+    top: 51px;
+    left: 205px;
+    z-index: 100;
+    width: 190px;
+}
+
+.cityInput {
+    position: absolute;
+    top: 51px;
+    left: 405px;
+    z-index: 100;
+    width: 190px;
+}
+
+.mainSearchInput {
+    width: 250px;
+    margin-bottom: 10px;
+}
