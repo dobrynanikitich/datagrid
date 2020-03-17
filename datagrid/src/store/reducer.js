@@ -62,36 +62,43 @@ const initialState = {
         name: 'firstName',
         isSorted: false,
         sortDir: null,
+        sortPriority: null,
       },
       {
         name: 'lastName',
         isSorted: false,
         sortDir: null,
+        sortPriority: null,
       },
       {
         name: 'city',
         isSorted: false,
         sortDir: null,
+        sortPriority: null,
       },
       {
         name: 'age',
         isSorted: false,
         sortDir: null,
+        sortPriority: null,
       },
       {
         name: 'userName',
         isSorted: false,
         sortDir: null,
+        sortPriority: null,
       },
       {
         name: 'amount',
         isSorted: false,
         sortDir: null,
+        sortPriority: null,
       },
       {
         name: 'boolean',
         isSorted: false,
         sortDir: null,
+        sortPriority: null,
       },
     ],
     searchInputs: {
@@ -232,6 +239,7 @@ const reducer = (state = initialState, action) => {
                     console.log(prevSortedColumn);
                     sortDirection[prevSortedColumn].isSorted = false;
                     sortDirection[prevSortedColumn].sortDir = null;
+                    sortDirection[prevSortedColumn].sortPriority = null;
                   }
                   newArr.splice(newArr.length - 1, 1, sortDirection[payload]);
                 }
@@ -250,12 +258,19 @@ const reducer = (state = initialState, action) => {
 
             sortDirection[payload].isSorted = true;
             sortDirection[payload].sortDir !== 'ascend' || sortDirection[payload].sortDir === 'descend' ? sortDirection[payload].sortDir = 'ascend' : sortDirection[payload].sortDir = 'descend';
+            if (newArr.length === 2) {
+              let firstIndex = sortDirection.findIndex(item => item.name === newArr[0].name);
+              let secondIndex = sortDirection.findIndex(item => item.name === newArr[1].name);
+              sortDirection[firstIndex].sortPriority = 'first';
+              sortDirection[secondIndex].sortPriority = 'second';
+            }
           } else {
             newArr = [];
           if (!sortedColumns[payload].isSorted) {
             sortDirection.map(item => {
               item.sortDir = null;
               item.isSorted = false;
+              item.sortPriority = null;
             })
             copyUsers.sort((a, b) => {
               sortDirection[payload].isSorted = true;

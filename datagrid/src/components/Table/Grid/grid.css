@@ -92,3 +92,12 @@
     cursor: pointer;
     background-color: lightskyblue;
   }
+
+  .display-none {
+    display: none;
+  }
+
+  .span-priority {
+    padding-right: 10px;
+    font-size: 9px;
+  }

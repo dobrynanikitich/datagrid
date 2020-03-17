@@ -112,7 +112,15 @@ const VirtualizedTable = ({ users = [], sortUsers, height, sortedColumns, filter
                 {
                     rowIndex !== 1 && 
                     <>
-                    {tableHeaderEnum[columnsToDisplay[columnIndex]]}             
+                    {
+                        <>
+                            <span 
+                                className={!sortedColumns[columnIndex + 1].sortPriority ? 'display-none' : 'span-priority'}>
+                                    {sortedColumns[columnIndex + 1].sortPriority === 'first' ? '1' : '2'}
+                            </span>
+                            {tableHeaderEnum[columnsToDisplay[columnIndex]]}
+                        </>
+                    }             
                         <div className='icons-wrapper'>
                             <FontAwesomeIcon 
                                 icon={faLongArrowAltDown}
@@ -147,6 +155,10 @@ const VirtualizedTable = ({ users = [], sortUsers, height, sortedColumns, filter
             >
                 {rowIndex === 1 ? null : 
                 <>
+                    <span
+                        className={!sortedColumns[columnIndex].sortPriority ? 'display-none' : 'span-priority'}>
+                            {sortedColumns[columnIndex].sortPriority === 'first' ? '1' : '2'}
+                    </span>
                     {'First Name'}
                     <div className='icons-wrapper'>
                         <FontAwesomeIcon
