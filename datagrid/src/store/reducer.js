@@ -217,20 +217,25 @@ const reducer = (state = initialState, action) => {
           }
 
           if (state.isShiftPressed) {
-            sortDirection.map(item => {
-              if (item.isSorted) {
-                newArr.push(item)
-              }
-            })
-            let spliceEl;
-            newArr.map((item, i) => {
-              if (item.name === sortArrayEnum[payload]) {
-                spliceEl = newArr.splice(i, 1, sortDirection[payload])
-              }
-            })
-            
-            if (!spliceEl) {
+            let prevSortedColumn;
+
+            if(!newArr.length) {
               newArr.push(sortDirection[payload])
+            } else {
+              if (newArr.length < 2 && newArr[0].name !== sortDirection[payload].name) {
+                console.log('newArr[0].name', newArr[0].name, 'sortDirection[payload]', sortDirection[payload]);
+                newArr.push(sortDirection[payload]);
+              } else {
+                if (newArr.length > 1) {
+                  prevSortedColumn = sortDirection.findIndex(item => item.name === newArr[1].name);
+                  if (newArr[1].name !== sortDirection[payload].name) {
+                    console.log(prevSortedColumn);
+                    sortDirection[prevSortedColumn].isSorted = false;
+                    sortDirection[prevSortedColumn].sortDir = null;
+                  }
+                  newArr.splice(newArr.length - 1, 1, sortDirection[payload]);
+                }
+              }
             }
 
             console.log(newArr)
@@ -276,6 +281,7 @@ const reducer = (state = initialState, action) => {
               });
             }
           }
+          newArr.push(sortDirection[payload]);
           }
 
           const transormeUsers = filtersUsersArrayHandler(filters, copyUsers);
