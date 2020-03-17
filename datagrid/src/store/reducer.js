@@ -113,8 +113,6 @@ const initialState = {
     sort: [],
     clickedRows: [],
     columnsToDisplay: Object.keys(tableHeaderEnum),
-    offset: 0,
-    paused: true,
     isVirtualized: true,
 }
 
@@ -230,13 +228,11 @@ const reducer = (state = initialState, action) => {
               newArr.push(sortDirection[payload])
             } else {
               if (newArr.length < 2 && newArr[0].name !== sortDirection[payload].name) {
-                console.log('newArr[0].name', newArr[0].name, 'sortDirection[payload]', sortDirection[payload]);
                 newArr.push(sortDirection[payload]);
               } else {
                 if (newArr.length > 1) {
                   prevSortedColumn = sortDirection.findIndex(item => item.name === newArr[1].name);
                   if (newArr[1].name !== sortDirection[payload].name) {
-                    console.log(prevSortedColumn);
                     sortDirection[prevSortedColumn].isSorted = false;
                     sortDirection[prevSortedColumn].sortDir = null;
                     sortDirection[prevSortedColumn].sortPriority = null;
@@ -245,8 +241,6 @@ const reducer = (state = initialState, action) => {
                 }
               }
             }
-
-            console.log(newArr)
             
             copyUsers = _.orderBy(copyUsers, newArr.map(item => item.name), newArr.map(item => {
               if (item.name !== sortArrayEnum[payload]) {
